@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haar for disting NT: User Manual</title>
+<style>
+  :root{
+    --bg:#0b1119; --panel:#1c242e; --panel-edge:#39424e;
+    --ink:#c9d9e6; --muted:#84939f; --accent:#e2a24a;
+    --oled:#04070b; --glow:rgba(140,190,255,.13);
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:var(--mono);margin:0;padding:40px 20px 90px}
+  .wrap{max-width:840px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+  .eyebrow{color:var(--accent);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
+  h1{font-size:30px;font-weight:700;color:#eef2f6;margin:10px 0 4px;letter-spacing:.14em;text-wrap:balance}
+  .vstamp{color:var(--muted);font-size:11px;letter-spacing:.14em;margin:0 0 10px}
+  .lede{color:var(--muted);font-size:13.5px;line-height:1.7;max-width:64ch;margin:0}
+  .lede b{color:var(--ink)}
+  h2{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 16px;font-weight:600}
+  h3{font-size:13px;color:#e8eef5;margin:22px 0 8px;font-weight:700;letter-spacing:.02em}
+  section>h3:first-of-type{margin-top:0}
+  p{font-size:12.5px;line-height:1.75;color:var(--muted);margin:0 0 10px;max-width:70ch}
+  p b,li b{color:var(--ink)}
+  p code,li code,td code{color:var(--accent);background:rgba(226,162,74,.08);padding:0 4px;border-radius:3px;font-size:.95em}
+  ul,ol{margin:0 0 10px;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+  li{font-size:12.5px;line-height:1.7;color:var(--muted)}
+  li::marker{color:var(--accent)}
+  a{color:var(--accent)}
+
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .toc a{color:var(--ink);text-decoration:none;font-size:10.5px;letter-spacing:.08em;
+    border:1px solid var(--panel-edge);border-radius:999px;padding:5px 12px;background:#141b24}
+  .toc a:hover,.toc a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+
+  .panel{background:linear-gradient(180deg,#232b35,#1a212a);border:1px solid var(--panel-edge);
+    border-radius:12px;padding:22px 26px 24px;position:relative;
+    box-shadow:0 20px 50px rgba(0,0,0,.45)}
+  .screw{position:absolute;width:8px;height:8px;border-radius:50%;background:#0f141b;border:1px solid #444f5c}
+  .screw.tl{top:10px;left:10px}.screw.tr{top:10px;right:10px}
+  .screw.bl{bottom:10px;left:10px}.screw.br{bottom:10px;right:10px}
+  .screenframe{background:#0e141c;border:1px solid #05080c;border-radius:6px;padding:10px;
+    box-shadow:inset 0 2px 10px rgba(0,0,0,.8), 0 0 34px var(--glow)}
+  canvas{display:block;width:100%;image-rendering:pixelated;background:var(--oled)}
+  canvas.screen{aspect-ratio:4/1}
+  .cap{font-size:11.5px;color:var(--muted);line-height:1.65;margin-top:10px;max-width:70ch}
+  .cap b{color:var(--ink)}
+  .potrow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:16px}
+  @media (max-width:560px){.potrow{grid-template-columns:1fr}}
+  .potrow label{display:flex;flex-direction:column;gap:6px;font-size:10.5px;letter-spacing:.16em;
+    color:var(--accent);text-transform:uppercase}
+  .potrow input[type=range]{width:100%;accent-color:var(--accent)}
+
+  table{border-collapse:collapse;width:100%;font-size:12px}
+  th{color:var(--muted);font-weight:600;text-align:left;font-size:10px;text-transform:uppercase;
+    letter-spacing:.14em;padding:8px 12px;border-bottom:1px solid #2c3641}
+  td{padding:8px 12px;border-bottom:1px solid #1c242e;vertical-align:top;line-height:1.6;color:var(--muted)}
+  td:first-child{color:#e8eef5;font-weight:700;white-space:nowrap}
+  td:nth-child(2){color:var(--accent);white-space:nowrap}
+  .tablewrap{overflow-x:auto}
+  .wide td:nth-child(2){white-space:normal}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .card{border:1px solid var(--panel-edge);border-radius:10px;background:#141b24;padding:16px 18px}
+  .card h4{margin:0 0 8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .card p{margin:0;font-size:12px}
+  .card .set{display:block;margin-top:10px;padding-top:10px;border-top:1px dashed #2c3641;
+    font-size:11px;color:#a9b4c0;line-height:1.8}
+  .card .set b{color:var(--accent);font-weight:600}
+
+  .note{border:1px solid var(--panel-edge);border-left:3px solid var(--accent);border-radius:8px;
+    background:#141b24;padding:12px 16px;font-size:12px;color:var(--muted);line-height:1.7;max-width:none}
+  .note b{color:var(--ink)}
+
+  .pages{display:flex;flex-direction:column;margin:18px 0 6px}
+  .pagecard{border:1px solid var(--panel-edge);border-radius:10px;background:#141b24;padding:16px 20px 16px}
+  .pagehead{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .pageno{color:var(--accent);font-size:10px;letter-spacing:.2em;border:1px solid var(--accent);
+    border-radius:3px;padding:2px 7px;white-space:nowrap}
+  .pagename{color:#e8eef5;font-weight:700;font-size:13px}
+  .pagewhat{color:var(--muted);font-size:11.5px;margin-left:auto;text-align:right}
+  .potline{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .potviz{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;
+    border-top:1px dashed #2c3641;padding-top:12px}
+  .potdot{width:30px;height:30px;border-radius:50%;border:2px solid var(--muted);position:relative;flex:none}
+  .potdot::after{content:"";position:absolute;left:50%;top:2px;width:2px;height:9px;
+    background:var(--muted);transform:translateX(-50%)}
+  .potdot.push{border-color:var(--accent)}
+  .potdot.push::after{background:var(--accent)}
+  .potviz b{color:#e8eef5;font-size:12px;letter-spacing:.08em}
+  .potviz small{color:var(--muted);font-size:10.5px;line-height:1.5}
+  .potviz .pushhint{color:var(--accent);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+  .pagearrow{display:flex;align-items:center;gap:10px;color:var(--accent);
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;padding:6px 0}
+  .pagearrow::before{content:"";width:2px;height:18px;background:var(--panel-edge);margin-left:34px}
+
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0 14px}
+  .flow span{border:1px solid var(--panel-edge);background:#141b24;border-radius:6px;
+    padding:5px 10px;font-size:10.5px;letter-spacing:.08em;color:var(--ink)}
+  .flow em{color:var(--accent);font-style:normal;font-size:11px}
+
+  .qa dt{font-size:12.5px;color:#e8eef5;font-weight:700;margin-top:14px}
+  .qa dt:first-child{margin-top:0}
+  .qa dd{margin:4px 0 0;font-size:12.5px;line-height:1.7;color:var(--muted)}
+
+  footer{border-top:1px solid #1c242e;padding-top:22px;text-align:center}
+  footer p{max-width:none;margin:0 0 6px}
+  .fin{color:var(--accent);letter-spacing:.3em;font-size:10px;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Ormer Modular · made in Guernsey</div>
+    <h1>HAAR</h1>
+    <p class="vstamp">USER MANUAL · EXPERT SLEEPERS DISTING NT</p>
+    <p class="lede">Haar is the sea fog that swallows the Channel Islands in an afternoon.
+    The reverb of the same name is a lush stereo algorithmic tail with that weather baked
+    in: <b>highs die into the murk, lows bloom</b>. Three knobs do almost everything.
+    <b>FOG</b> is how much weather, <b>GLOW</b> is the lamp warming through it,
+    <b>DRIFT</b> is how much the world moves.</p>
+    <nav class="toc">
+      <a href="#screen">The screen</a><a href="#pots">The three knobs</a>
+      <a href="#other">Other controls</a><a href="#nt">On the disting NT</a>
+      <a href="#recipes">Field notes</a>
+      <a href="#trouble">Troubleshooting</a><a href="#specs">Specifications</a>
+    </nav>
+  </header>
+
+  <section class="panel" id="screen">
+    <span class="screw tl"></span><span class="screw tr"></span>
+    <span class="screw bl"></span><span class="screw br"></span>
+    <div class="screenframe"><canvas id="hero" class="screen" width="256" height="64"></canvas></div>
+    <div class="potrow">
+      <label>Fog <input type="range" id="rH" min="0" max="100" value="50"></label>
+      <label>Glow <input type="range" id="rG" min="0" max="100" value="30"></label>
+      <label>Drift <input type="range" id="rD" min="0" max="100" value="20"></label>
+    </div>
+    <p class="cap">This is the live display, running the same drawing code as the plug-in.
+    <b>Fog</b> thickens with FOG and the stars fade behind it. The <b>lamp</b> and its halo
+    heat up with GLOW. DRIFT is the weather: <b>swell</b> rolls through the sea, the
+    <b>beam</b> speeds up and hunts, and past halfway the tape brings <b>grain, dropouts and
+    a slow weave</b> of the whole picture. The spray sparkle follows the actual wet level.
+    The three labels along the bottom sit above the three physical pots.</p>
+  </section>
+
+  <section id="pots">
+    <h2>The three knobs</h2>
+    <p>Under the knobs is a full algorithmic plate: predelay, drive, a diffusion tank with
+    split high/low damping, a tilt EQ and a tape stage. You never meet those parameters
+    raw. Each knob is a <b>macro</b>: a curated path through the engine, tuned by ear against
+    a low foghorn tone.</p>
+    <div class="flow">
+      <span>IN</span><em>→</em><span>PREDELAY</span><em>→</em><span>DRIVE</span><em>→</em>
+      <span>DIFFUSION TANK</span><em>→</em><span>TILT EQ</span><em>→</em><span>TAPE / LO-FI</span><em>→</em><span>MIX</span><em>→</em><span>OUT</span>
+    </div>
+
+    <h3>FOG: how much weather</h3>
+    <p>Size, decay and diffusion ride together. The tail is fully smeared by 30%, because Haar has
+    no interest in discrete early reflections, and noon is already a proper hall, around
+    five to six seconds. Size glides rather than jumps, so riding FOG bends the tail's
+    pitch tape-style. The damping asymmetry (aggressive on top, light below) is the fixed
+    character, deepening slightly with size the way air eats treble over distance.</p>
+    <p><b>The last few degrees are freeze.</b> Above roughly 85% the loop gain ramps to
+    unity: the lows hold and bloom indefinitely while the high damping keeps eating the top,
+    so a frozen chord slowly sinks into the murk instead of ringing static.</p>
+
+    <h3>GLOW: the lamp</h3>
+    <p>Drive into the tank, with a darkening tilt EQ riding alongside so the saturation
+    thickens instead of turning harsh. The distortion is asymmetric, which gives even harmonics and warmth
+    rather than buzz. The loop's own saturation deepens with it, so the tail itself
+    compresses and warms, not just the signal entering it.</p>
+
+    <h3>DRIFT: how much the world moves</h3>
+    <p>Still water at zero, though a whisper of motion is always on because nothing analog is
+    pitch-perfect. The lower half brings up four sine LFOs into a slow lush chorus, at its
+    deepest around 45%. From there genuine random wander takes over and <b>the tape comes
+    in</b>: wow first, flutter and deeper saturation past 60%, and a real top-end rolloff
+    that pulls the tail down toward 2&nbsp;kHz at full. The sine chorus recedes as the
+    weather worsens but never leaves.</p>
+    <p class="note"><b>Feel:</b> big DRIFT moves settle over a fraction of a second. Weather
+    changes, it doesn't switch. As the tape engages you may hear a brief pitch swoop while
+    the tape distance stretches in. Both are deliberate. With GLOW and DRIFT both near full
+    the tape layer and the drive stack up and the tail turns dirty on purpose: that corner is
+    heavy weather.</p>
+  </section>
+
+  <section id="other">
+    <h2>Other controls</h2>
+    <div class="tablewrap"><table>
+      <tr><th>Control</th><th>Range</th><th>What it does</th></tr>
+      <tr><td>Input</td><td>0–100%</td><td>Level into the tank. Interacts with GLOW: hotter input drives harder. To keep the tank clean, pull Input and GLOW back and make the level up with Wet level.</td></tr>
+      <tr><td>Mix</td><td>0–100%</td><td>Equal-power dry/wet. 100% is the classic send-return wash.</td></tr>
+      <tr><td>Predelay</td><td>0–500 ms</td><td>Space before the fog arrives. It glides when changed, bending pitch tape-style rather than clicking.</td></tr>
+      <tr><td>Filter HP</td><td>0–100%</td><td>High-pass on the wet path, sweeping up to about 900 Hz. Thin the fog, keep the shimmer. Exactly open at 0, click-free at any sweep speed.</td></tr>
+      <tr><td>Filter LP</td><td>0–100%</td><td>Low-pass on the wet path, sweeping down to about 900 Hz. Sink the tail below the mix. Independent of HP: both together leave a band of fog.</td></tr>
+      <tr><td>Shimmer</td><td>0–100%</td><td>Pitch-shifted regeneration: a shifted tap of the tail feeds back into the tank, so each pass climbs (or falls). Haar's high damping eats every generation, so the voices bloom, then sink into the murk. Safe with freeze: it holds and glows rather than running away.</td></tr>
+      <tr><td>Shim tune</td><td>−24 – +24 st</td><td>The shimmer interval, default +12 (octave up). −12 is the sleeper: the fog deepening instead of glowing. Retuning a ringing tail bends it varispeed-style. Octaves stay in key through every generation; other intervals stack as they recirculate (a fifth blooms into a spiral of fifths). That wander is the weather, not a fault.</td></tr>
+      <tr><td>Wet level</td><td>0.0–12.0 dB</td><td>Make-up gain on the wet path, after the tank and before the mix. Pull Input and GLOW back to keep the tank clean and give it headroom, then push the tail back up here. At 0&nbsp;dB (the default) Haar sounds exactly as it always did, and the dry signal is never touched. It has no pot: set it from the parameter page, or map it.</td></tr>
+    </table></div>
+  </section>
+
+  <section id="nt">
+    <h2>On the disting NT</h2>
+    <h3>Installing</h3>
+    <p>Haar needs
+    <a href="https://www.expert-sleepers.co.uk/distingNTfirmwareupdates.html">disting NT
+    firmware 1.19 or newer</a>.</p>
+    <ol>
+      <li>Download <code>haar-plugin.zip</code> and unzip it. Copy <code>haar.o</code> into
+        <code>programs/plug-ins/</code> on the MicroSD card.</li>
+      <li>Restart the module (or rescan plug-ins from the settings menu).</li>
+      <li>Add an algorithm → <b>Haar</b> (tagged Effect / Reverb).</li>
+    </ol>
+
+    <h3>The pots: three pages</h3>
+    <p>The three pots always do exactly three things, and which three depends on the page.
+    <b>Pushing the centre pot steps to the next page</b>; the label strip along the bottom
+    of the screen always names what the pots do right now, with a level bar for each.</p>
+
+    <div class="pages">
+      <div class="pagecard">
+        <div class="pagehead"><span class="pageno">PAGE 1</span>
+          <span class="pagename">The macros</span>
+          <span class="pagewhat">where Haar lives: the sound in three moves</span></div>
+        <div class="potline">
+          <div class="potviz"><span class="potdot"></span><b>FOG</b><small>the weather: size, decay, freeze at the top</small></div>
+          <div class="potviz"><span class="potdot push"></span><b>GLOW</b><small>the lamp: drive and warmth</small><span class="pushhint">push → page 2</span></div>
+          <div class="potviz"><span class="potdot"></span><b>DRIFT</b><small>the motion: chorus into tape</small></div>
+        </div>
+      </div>
+      <div class="pagearrow">push the centre pot</div>
+      <div class="pagecard">
+        <div class="pagehead"><span class="pageno">PAGE 2</span>
+          <span class="pagename">The filter &amp; shimmer</span>
+          <span class="pagewhat">performance shaping of the wet tail</span></div>
+        <div class="potline">
+          <div class="potviz"><span class="potdot"></span><b>HP</b><small>high-pass: thin the fog from below</small></div>
+          <div class="potviz"><span class="potdot push"></span><b>SHIMMER</b><small>octave-up bloom</small><span class="pushhint">push → page 3</span></div>
+          <div class="potviz"><span class="potdot"></span><b>LP</b><small>low-pass: sink the tail into the dark</small></div>
+        </div>
+      </div>
+      <div class="pagearrow">push the centre pot</div>
+      <div class="pagecard">
+        <div class="pagehead"><span class="pageno">PAGE 3</span>
+          <span class="pagename">The levels</span>
+          <span class="pagewhat">set when patching, then leave</span></div>
+        <div class="potline">
+          <div class="potviz"><span class="potdot"></span><b>INPUT</b><small>level into the tank</small></div>
+          <div class="potviz"><span class="potdot push"></span><b>PREDELAY</b><small>0–500 ms before the fog</small><span class="pushhint">push → page 1</span></div>
+          <div class="potviz"><span class="potdot"></span><b>MIX</b><small>equal-power dry/wet</small></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note"><b>Nothing ever jumps:</b> after a page change, each pot stays silent
+    until you turn it to the value it now owns (the NT's soft takeover). Flip pages freely
+    mid-performance. <b>Wet level</b> has no pot, so it is not on any page: set it from the
+    parameter page.</p>
+    <h3>Automation and CV</h3>
+    <p>Every parameter, the three macros included, is a normal NT parameter, so all of it
+    can be mapped to CV, MIDI or i2c and automated through the module's own
+    <b>Mappings</b> system, exactly like a built-in algorithm. The macros run at 0.1%
+    resolution and every audible target glides inside the engine, so mapped steps and fast
+    automation stay clean.</p>
+
+    <h3>Routing</h3>
+    <div class="tablewrap"><table>
+      <tr><th>Signal</th><th>Default</th><th>Notes</th></tr>
+      <tr><td>Left input</td><td>Input 1</td><td>&nbsp;</td></tr>
+      <tr><td>Right input</td><td>Input 2</td><td>Set to <b>None</b> for mono: left feeds both sides.</td></tr>
+      <tr><td>Left output</td><td>Output 1</td><td rowspan="2">Mode defaults to <b>Replace</b>: Mix already carries your dry signal.
+        Use <b>Add</b> only to sum onto a busy bus, with Mix at 100% wet.</td></tr>
+      <tr><td>Right output</td><td>Output 2</td></tr>
+    </table></div>
+  </section>
+
+  <section id="recipes">
+    <h2>Field notes</h2>
+    <div class="cards">
+      <div class="card"><h4>Foghorn</h4>
+        <p>The reference patch. A low, slow drone becomes a coastline.</p>
+        <span class="set"><b>FOG</b> 65 · <b>GLOW</b> 40 · <b>DRIFT</b> 15 · <b>MIX</b> 60<br>
+        Feed it anything dark and sustained; let the asymmetric damping do the arranging.</span></div>
+      <div class="card"><h4>Held light</h4>
+        <p>Freeze as an instrument. Catch a chord, then play against the fog.</p>
+        <span class="set"><b>FOG</b> 100 · <b>GLOW</b> 25 · <b>DRIFT</b> 10 · <b>MIX</b> 100<br>
+        Map FOG to a CV source and drop it from 100 to ~70 to let the frozen tail exhale.</span></div>
+      <div class="card"><h4>Worn tape</h4>
+        <p>The full weather: wow, flutter, grain, the top gone soft.</p>
+        <span class="set"><b>FOG</b> 55 · <b>GLOW</b> 60 · <b>DRIFT</b> 85 · <b>MIX</b> 70<br>
+        Best on melodic loops: the wander detunes the tail against the dry.</span></div>
+      <div class="card"><h4>Undertow</h4>
+        <p>Down-shimmer: the tail keeps sinking an octave into the murk.</p>
+        <span class="set"><b>FOG</b> 70 · <b>SHIMMER</b> 55 · <b>Shim tune</b> −12 · <b>MIX</b> 70<br>
+        Slow melodic lines grow a seabed. Try Shim tune −7 for something stranger.</span></div>
+      <div class="card"><h4>Lantern choir</h4>
+        <p>Shimmer through fog: octaves that bloom above a drone and sink back into it.</p>
+        <span class="set"><b>FOG</b> 75 · <b>GLOW</b> 30 · <b>DRIFT</b> 10 · <b>SHIMMER</b> 60 · <b>MIX</b> 80<br>
+        Push FOG to the top mid-swell and the choir hangs in the frozen fog.</span></div>
+      <div class="card"><h4>Harbour room</h4>
+        <p>Short, warm, barely moving. Haar as a mixer's space rather than an effect.</p>
+        <span class="set"><b>FOG</b> 20 · <b>GLOW</b> 30 · <b>DRIFT</b> 0 · <b>MIX</b> 25<br>
+        Add 40–80 ms of predelay to keep transients ahead of the wash.</span></div>
+    </div>
+  </section>
+
+  <section id="trouble">
+    <h2>Troubleshooting</h2>
+    <dl class="qa">
+      <dt>Haar doesn't appear in the NT's algorithm list.</dt>
+      <dd>Update the module's firmware (Haar needs 1.19 or newer) and check
+      <code>haar.o</code> really is inside <code>programs/plug-ins/</code>.</dd>
+      <dt>I hear the dry signal twice.</dt>
+      <dd>The output mode is set to Add while Mix is below 100%. Either keep the default
+      Replace, or run Mix fully wet when summing onto a bus.</dd>
+      <dt>The tail pitch-bends when I move FOG.</dt>
+      <dd>That's the size glide: the tank physically stretches, like varispeed on tape.
+      Ride it slowly for a chorus-like bloom, or park it before a take.</dd>
+      <dt>Frozen tails eventually go dark.</dt>
+      <dd>By design: freeze holds the lows at unity while high damping keeps working, so a
+      frozen chord sinks into the murk rather than ringing static.</dd>
+    </dl>
+  </section>
+
+  <section id="specs">
+    <h2>Specifications</h2>
+    <div class="tablewrap"><table class="wide">
+      <tr><td>Engine</td><td>stereo algorithmic plate</td><td>4 input allpasses into two cross-fed branches; split high/low damping; 4 modulators (sine + random wander per pair); tilt EQ; tape wow/flutter stage</td></tr>
+      <tr><td>Size range</td><td>0.25× – 2.25×</td><td>of the base plate lengths, glided</td></tr>
+      <tr><td>Predelay</td><td>0 – 500 ms</td><td>glided, interpolated</td></tr>
+      <tr><td>Freeze</td><td>FOG &gt; ~85%</td><td>lows sustain indefinitely; top keeps damping</td></tr>
+      <tr><td>disting NT</td><td>firmware 1.19+</td><td>48 kHz · about 19 KB code · about 497 KB of DRAM · pots = macros, everything CV-mappable</td></tr>
+      <tr><td>Parameters</td><td>17</td><td>11 on the Haar page and 6 on the Routing page</td></tr>
+    </table></div>
+    <p style="margin-top:14px">The tank topology and base delay lengths are adapted from
+    Mutable Instruments Rings (MIT licence, © Émilie Gillet; the notice is preserved in the
+    source). Everything else, including the runtime-sized rebuild, split damping, modulators, tape
+    stage and the macro curves, is original. Haar is closed-source and proprietary.</p>
+  </section>
+
+  <footer>
+    <p class="fin">Haar · Ormer Modular · made in Guernsey</p>
+    <p style="font-size:11px;color:var(--muted)">© 2026 Ormer Modular. All rights reserved.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  // The module's display, ported line for line from the plug-in's draw().
+  var cv = document.getElementById('hero'), ctx = cv.getContext('2d');
+  var rH = document.getElementById('rH'), rG = document.getElementById('rG'), rD = document.getElementById('rD');
+  var t = 200, beamPhase = 0;
+
+  function shade(c){
+    var a = c/15; a = a*(0.55+0.45*a);
+    return 'rgb('+Math.round(8+a*225)+','+Math.round(10+a*235)+','+Math.round(14+a*241)+')';
+  }
+  function P(x,y,c){ if(x<0||x>255||y<0||y>63) return; ctx.fillStyle=shade(c); ctx.fillRect(x,y,1,1); }
+  function rect(x0,y0,x1,y1,c){ for(var y=y0;y<=y1;y++) for(var x=x0;x<=x1;x++) P(x,y,c); }
+  function box(x0,y0,x1,y1,c){ for(var x=x0;x<=x1;x++){P(x,y0,c);P(x,y1,c);} for(var y=y0;y<=y1;y++){P(x0,y,c);P(x1,y,c);} }
+  function line(x0,y0,x1,y1,c){
+    var dx=x1-x0, dy=y1-y0, n=Math.max(Math.abs(dx),Math.abs(dy));
+    if(!n){P(x0,y0,c);return;}
+    for(var i=0;i<=n;i++) P(x0+Math.round(dx*i/n), y0+Math.round(dy*i/n), c);
+  }
+  var F={A:'010101111101101',D:'110101101101110',F:'111100110100100',G:'011100101101011',
+         H:'101101111101101',I:'111010010010111',L:'100100100100111',O:'010101101101010',
+         R:'110101110101101',T:'111010010010010',W:'101101101111101'};
+  function text(cx,y,s,c){
+    var w=s.length*4-1, x0=cx-(w>>1), yT=y-4;
+    for(var i=0;i<s.length;i++){var g=F[s[i]]; if(!g) continue;
+      for(var r=0;r<5;r++) for(var k=0;k<3;k++) if(g[r*3+k]==='1') P(x0+i*4+k,yT+r,c);}
+  }
+  function hash(a,b,c){
+    var h=(Math.imul(a,0x9E3779B1)^Math.imul(b,0x85EBCA77)^Math.imul(c,0xC2B2AE3D))>>>0;
+    h^=h>>>15; h=Math.imul(h,0x846CA68B)>>>0; h^=h>>>16; return h>>>0;
+  }
+  function wave(ph){ var q=ph*2-1, aq=Math.abs(q); return 4*q*(1-aq); }
+
+  var HORIZON=42, LX=128, LY=14;
+  function drawScene(){
+    ctx.fillStyle=shade(0); ctx.fillRect(0,0,256,64);
+    t++;
+    var h=rH.value/100, g=rG.value/100, d=rD.value/100;
+    var wet=0.35+0.25*wave(((t*2)&1023)/1024);
+    var lofi=Math.min(Math.max((d-0.45)/0.55,0),1);
+    var jx=0;
+    if(lofi>0.05) jx=Math.round(wave(((t*3)&255)/256)*(2.2*lofi));
+
+    if(h<0.85){
+      var sc=Math.floor((1-h)*5);
+      for(var s=0;s<14;s++){var r=hash(s,0x57A2,0), x=r%256, y=2+((r>>>9)%26);
+        var c=sc-((((t>>4)+((r>>>17)&31))&7)<2?2:0);
+        if(c>0&&(x<100||x>156)) P(x,y,c);}
+    }
+    var mc=7-Math.floor(h*5);
+    if(mc>1){rect(30,7,33,10,mc);P(29,8,mc-1);P(29,9,mc-1);P(34,8,mc-1);P(34,9,mc-1);
+      P(31,6,mc-1);P(32,6,mc-1);P(31,11,mc-1);P(32,11,mc-1);}
+
+    beamPhase+=0.0015+0.012*d; if(beamPhase>=1) beamPhase-=1;
+    var sw=wave(beamPhase);
+    var ex=Math.min(255,Math.max(0,LX+jx+Math.round(sw*150)));
+    var ey=Math.min(30,Math.max(8,LY+Math.round(wave((t&31)/32)*(1+6*d))));
+    var bc=Math.min(12,2+Math.floor(g*5)+Math.floor(wet*2));
+    line(LX+jx,LY-1,ex,ey-7,bc-2); line(LX+jx,LY+1,ex,ey+7,bc-2); line(LX+jx,LY,ex,ey,bc);
+
+    var slowT=(t*(2+Math.floor(10*d)))>>4;
+    var thresh=(0.06+0.6*h)*4294967295;
+    var fogC=2+Math.floor(wet*1.5);
+    for(var y2=22;y2<HORIZON+8;y2+=2) for(var x2=0;x2<256;x2+=2)
+      if(hash(x2+(slowT%512),y2,slowT>>6)<thresh) P(x2,y2,fogC);
+
+    line(0,HORIZON,255,HORIZON,3);
+
+    var amp=0.4+5*d, sph=((t&1023)/1024)*(1+3*d);
+    for(var row=0;row<6;row++){
+      var y0=HORIZON+3+row*3+(row>2?row-2:0);
+      var off=((t*(1+row)*(1+Math.floor(3*d)))>>4)&255;
+      var c2=Math.max(2,4-(row>>1)), rs=0.5+0.13*row;
+      for(var seg=0;seg<6;seg++){
+        var r2=hash(row,seg,0xB0A7);
+        var x3=((r2%256)+off)&255, len=8+((r2>>>10)%14);
+        if(d>0.55&&len>10) len=6+(len&3);
+        var x4=Math.min(255,x3+len);
+        var ph=sph+x3*0.006+row*0.17; ph-=Math.floor(ph);
+        var y3=Math.min(63,Math.max(HORIZON+1,y0+Math.round(wave(ph)*amp*rs)));
+        line(x3,y3,x4,y3,c2);
+        if(wet>0.3&&((r2>>>20)&3)===0) P((x3+(len>>1))&255,y3-1,6+Math.floor(wet*6));
+      }
+    }
+
+    var lx=LX+jx;
+    rect(lx-3,20,lx+3,HORIZON-1,10); rect(lx-4,34,lx+4,HORIZON-1,10);
+    rect(lx-3,25,lx+3,27,4); rect(lx-4,35,lx+4,37,4);
+    line(lx-5,19,lx+5,19,12);
+    rect(lx-2,LY-1,lx+2,18,Math.min(15,8+Math.floor(g*7)));
+    line(lx-2,LY-2,lx+2,LY-2,6); P(lx,LY-3,6);
+    if(g>0.35) box(lx-4,LY-3,lx+4,19,2+Math.floor(g*4));
+    rect(lx-7,HORIZON-1,lx+7,HORIZON+1,5);
+
+    if(lofi>0.02){
+      var grains=Math.floor(lofi*46);
+      for(var i2=0;i2<grains;i2++){var r3=hash(t,i2,0x6A31);
+        P(r3%256,(r3>>>9)%64,2+((r3>>>16)%4));}
+      var dr=hash(t>>2,0xD204,0);
+      if((dr%100)<lofi*55){var yd=(dr>>>8)%62, xd=(dr>>>16)%180;
+        line(xd,yd,Math.min(255,xd+24+((dr>>>24)%52)),yd,1);}
+    }
+
+    var cxs=[43,128,213], names=['FOG','GLOW','DRIFT'], vals=[h,g,d];
+    for(var i3=0;i3<3;i3++){
+      rect(cxs[i3]-17,54,cxs[i3]+17,63,0);
+      line(cxs[i3]-14,56,cxs[i3]+14,56,3);
+      var fill=Math.round(vals[i3]*28);
+      if(fill>0) line(cxs[i3]-14,56,cxs[i3]-14+fill,56,11);
+      line(cxs[i3]-14+fill,55,cxs[i3]-14+fill,57,13);
+      text(cxs[i3],63,names[i3],9);
+    }
+  }
+
+  var reduced=false;
+  try{ reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  if(reduced){ drawScene(); [rH,rG,rD].forEach(function(r){r.addEventListener('input',drawScene);}); }
+  else{
+    var last=0;
+    function tick(ts){ if(ts-last>33){ last=ts; drawScene(); } requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  }
+})();
+</script>
+</body>
+</html>
