@@ -110,8 +110,6 @@ Haar is sold through the VCV Library and needs Rack 2. It is available for Mac (
 2. In Rack, choose **Library > Log in**, then **Library > Update all**. Rack downloads and installs Haar.
 3. Restart Rack, then add **Haar** from the module browser, under Ormer Modular.
 
-To install a `.vcvplugin` file by hand instead: in Rack choose **Help > Open user folder**, open the `plugins-…` folder for your platform (for example `plugins-mac-arm64`, `plugins-win-x64` or `plugins-lin-x64`), put the file in it and restart Rack.
-
 ## Field notes
 
 Starting points. Values are percentages.

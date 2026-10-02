@@ -22,7 +22,7 @@ A small living scene of a lighthouse on the sea sits on the screen and answers t
 
 **disting NT** (firmware 1.19 or newer): download `haar-plugin.zip` from the [Releases](../../releases) page, unzip it and copy `haar.o` into `programs/plug-ins/` on the MicroSD card. Restart the module, then add the **Haar** algorithm. The [manual](docs/nt/MANUAL.md) covers the pots and pages.
 
-**VCV Rack** (Rack 2, Mac, Windows and Linux): Haar is sold through the VCV Library. Add it to your account there, then in Rack choose **Library > Log in** and **Library > Update all**. The [manual](docs/vcv/MANUAL.md) has the details, including installing a `.vcvplugin` file by hand.
+**VCV Rack** (Rack 2, Mac, Windows and Linux): Haar is sold through the VCV Library. Add it to your account there, then in Rack choose **Library > Log in** and **Library > Update all**. The [manual](docs/vcv/MANUAL.md) has the details.
 
 ## Credits
 
