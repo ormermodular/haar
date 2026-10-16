@@ -4,7 +4,7 @@
 
 <p align="center">
   <img alt="Licence: proprietary" src="https://img.shields.io/badge/licence-proprietary-lightgrey">
-  <img alt="VCV Rack 2" src="https://img.shields.io/badge/VCV%20Rack-2-e2a24a">
+  <img alt="VCV Rack 2 version coming soon" src="https://img.shields.io/badge/VCV%20Rack%202-coming%20soon-e2a24a">
   <img alt="disting NT firmware 1.19 or newer" src="https://img.shields.io/badge/disting%20NT-firmware%201.19%2B-e2a24a">
 </p>
 
@@ -14,15 +14,15 @@ Haar is named for the cold sea fog that swallows the Channel Islands in an after
 
 Three knobs do almost everything. **FOG** is how much weather: size, decay and diffusion ride together, and the last few degrees freeze the tail. **GLOW** is the lamp warming through it: drive and a darkening tilt. **DRIFT** is how much the world moves, from still water through a slow chorus into random wander with tape wow, flutter and grain. Underneath sit a wet high-pass and low-pass, a tunable shimmer, predelay and a clear-tail control.
 
-A small living scene of a lighthouse on the sea sits on the screen and answers the knobs. Haar is made by Ormer Modular in Guernsey, for the disting NT and for VCV Rack.
+A small living scene of a lighthouse on the sea sits on the screen and answers the knobs. Haar is made by Ormer Modular in Guernsey, for the disting NT, with a VCV Rack version coming soon.
 
 [disting NT manual](docs/nt/MANUAL.md) · [VCV Rack manual](docs/vcv/MANUAL.md) · [Releases](../../releases)
 
 ## Installing
 
-**disting NT** (firmware 1.19 or newer): download `haar-plugin.zip` from the [Releases](../../releases) page, unzip it and copy `haar.o` into `programs/plug-ins/` on the MicroSD card. Restart the module, then add the **Haar** algorithm. The [manual](docs/nt/MANUAL.md) covers the pots and pages.
+**disting NT** (firmware 1.19 or newer): download `haar-plugin.zip` from the [Releases](../../releases) page, unzip it onto the root of the MicroSD card (it puts `haar.o` in `programs/plug-ins/ormermodular/`). Restart the module, then add the **Haar** algorithm. The [manual](docs/nt/MANUAL.md) covers the pots and pages.
 
-**VCV Rack** (Rack 2, Mac, Windows and Linux): Haar is sold through the VCV Library. Add it to your account there, then in Rack choose **Library > Log in** and **Library > Update all**. The [manual](docs/vcv/MANUAL.md) has the details.
+**VCV Rack:** a VCV Rack version is coming soon.
 
 ## Credits
 

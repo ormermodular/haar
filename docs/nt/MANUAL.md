@@ -70,7 +70,7 @@ Still water at zero, though a whisper of motion is always on because nothing ana
 
 Haar needs [disting NT firmware 1.19 or newer](https://www.expert-sleepers.co.uk/distingNTfirmwareupdates.html).
 
-1. Download `haar-plugin.zip` and unzip it. Copy `haar.o` into `programs/plug-ins/` on the MicroSD card.
+1. Download `haar-plugin.zip` and unzip it onto the root of the MicroSD card. It puts `haar.o` in `programs/plug-ins/ormermodular/`.
 2. Restart the module (or rescan plug-ins from the settings menu).
 3. Add an algorithm, then choose **Haar** (tagged Effect and Reverb).
 
@@ -125,7 +125,7 @@ FOG 20, GLOW 30, DRIFT 0, MIX 25. Add 40 to 80 ms of predelay to keep transients
 
 ## Troubleshooting
 
-**Haar doesn't appear in the NT's algorithm list.** Update the module's firmware (Haar needs 1.19 or newer) and check `haar.o` really is inside `programs/plug-ins/`.
+**Haar doesn't appear in the NT's algorithm list.** Update the module's firmware (Haar needs 1.19 or newer) and check `haar.o` really is inside `programs/plug-ins/ormermodular/`.
 
 **I hear the dry signal twice.** The output mode is set to Add while Mix is below 100%. Either keep the default Replace, or run Mix fully wet when summing onto a bus.
 
