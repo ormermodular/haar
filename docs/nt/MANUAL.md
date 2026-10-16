@@ -4,7 +4,7 @@
 
 Haar is the sea fog that swallows the Channel Islands in an afternoon. The reverb of the same name is a lush stereo algorithmic tail with that weather baked in: **highs die into the murk, lows bloom.** Three knobs do almost everything. **FOG** is how much weather, **GLOW** is the lamp warming through it, **DRIFT** is how much the world moves.
 
-This is the manual for the Expert Sleepers disting NT plug-in. The VCV Rack module has its own manual in [`docs/vcv`](../vcv/MANUAL.md).
+This is the manual for the Expert Sleepers disting NT plug-in.
 
 ## Contents
 
