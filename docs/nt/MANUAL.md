@@ -88,6 +88,8 @@ Push the centre pot on page 1 for page 2, on page 2 for page 3, and on page 3 to
 
 **Nothing ever jumps.** After a page change, each pot stays silent until you turn it to the value it now owns (the NT's soft takeover). Flip pages freely mid-performance. Wet level has no pot, so it is not on any page: set it from the parameter page.
 
+**Encoders and the parameter list.** While Haar's screen is showing, the two encoders, the right encoder push and the right pot push do nothing, so you can never change a hidden parameter by accident. Press **button 2** to switch to the NT's parameter list, where the encoders, the right encoder push (reset the selected parameter to its default) and the right pot push (jump to the knob position) work as usual. The left pot push and left encoder push take you back to the overview from either view.
+
 ### Automation and CV
 
 Every parameter, the three macros included, is a normal NT parameter, so all of it can be mapped to CV, MIDI or i2c and automated through the module's own **Mappings** system, exactly like a built-in algorithm. The macros run at 0.1% resolution and every audible target glides inside the engine, so mapped steps and fast automation stay clean.
