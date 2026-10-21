@@ -16,7 +16,7 @@ Three knobs do almost everything. **FOG** is how much weather: size, decay and d
 
 A small living scene of a lighthouse on the sea sits on the screen and answers the knobs. Haar is made by Ormer Modular in Guernsey, for the disting NT, with a VCV Rack version coming soon.
 
-[disting NT manual](docs/nt/MANUAL.md) · [Releases](../../releases)
+[disting NT manual](https://ormermodular.github.io/haar/nt/) · [VCV Rack manual](https://ormermodular.github.io/haar/vcv/) · [Releases](../../releases)
 
 ## Installing
 
