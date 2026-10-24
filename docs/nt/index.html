@@ -221,7 +221,8 @@
     <h3>The pots: three pages</h3>
     <p>The three pots always do exactly three things, and which three depends on the page.
     <b>Pushing the centre pot steps to the next page</b>; the label strip along the bottom
-    of the screen always names what the pots do right now, with a level bar for each.</p>
+    of the screen always names what the pots do right now, with a level bar for each, and
+    three small squares at the bottom left show which page you are on.</p>
 
     <div class="pages">
       <div class="pagecard">
@@ -341,7 +342,7 @@
       <tr><td>Size range</td><td>0.25× – 2.25×</td><td>of the base plate lengths, glided</td></tr>
       <tr><td>Predelay</td><td>0 – 500 ms</td><td>glided, interpolated</td></tr>
       <tr><td>Freeze</td><td>FOG &gt; ~85%</td><td>lows sustain indefinitely; top keeps damping</td></tr>
-      <tr><td>disting NT</td><td>firmware 1.19+</td><td>48 kHz · about 19 KB code · about 497 KB of DRAM · pots = macros, everything CV-mappable</td></tr>
+      <tr><td>disting NT</td><td>firmware 1.19+</td><td>48 kHz · about 21 KB code · about 497 KB of DRAM · pots = macros, everything CV-mappable</td></tr>
       <tr><td>Parameters</td><td>17</td><td>11 on the Haar page and 6 on the Routing page</td></tr>
     </table></div>
     <p style="margin-top:14px">The tank topology and base delay lengths are adapted from
@@ -468,6 +469,10 @@
       line(cxs[i3]-14+fill,55,cxs[i3]-14+fill,57,13);
       text(cxs[i3],63,names[i3],9);
     }
+
+    // page dots: one square per pot page, the current page bright (this display is page 1)
+    rect(1,58,15,63,0);
+    for(var b=0;b<3;b++) rect(3+b*4,60,5+b*4,62,b===0?15:4);
   }
 
   var reduced=false;

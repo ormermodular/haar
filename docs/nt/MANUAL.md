@@ -76,7 +76,7 @@ Haar needs [disting NT firmware 1.19 or newer](https://www.expert-sleepers.co.uk
 
 ### The pots: three pages
 
-The three pots always do exactly three things, and which three depends on the page. **Pushing the centre pot steps to the next page.** The label strip along the bottom of the screen always names what the pots do right now.
+The three pots always do exactly three things, and which three depends on the page. **Pushing the centre pot steps to the next page.** The label strip along the bottom of the screen always names what the pots do right now, and three small squares at the bottom left show which page you are on.
 
 | Page | Left pot | Centre pot | Right pot |
 |---|---|---|---|
@@ -143,7 +143,7 @@ FOG 20, GLOW 30, DRIFT 0, MIX 25. Add 40 to 80 ms of predelay to keep transients
 | Size range | 0.25x to 2.25x | of the base plate lengths, glided |
 | Predelay | 0 to 500 ms | glided, interpolated |
 | Freeze | FOG above about 85% | lows sustain indefinitely; the top keeps damping |
-| disting NT | firmware 1.19 or newer | 48 kHz, about 19 KB code, about 497 KB of DRAM; pots are the macros, everything CV-mappable |
+| disting NT | firmware 1.19 or newer | 48 kHz, about 21 KB code, about 497 KB of DRAM; pots are the macros, everything CV-mappable |
 | Parameters | 17 | 11 on the Haar page and 6 on the Routing page |
 
 The tank topology and base delay lengths are adapted from Mutable Instruments Rings (MIT licence, copyright Emilie Gillet; the notice is preserved in the source). Everything else, including the runtime-sized rebuild, split damping, modulators, tape stage and the macro curves, is original. Haar is closed-source and proprietary.
